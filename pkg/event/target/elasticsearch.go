@@ -34,6 +34,7 @@ type ElasticsearchArgs struct {
 	Format string   `json:"format"`
 	URL    xnet.URL `json:"url"`
 	Index  string   `json:"index"`
+	Pipeline string `json:"pipeline"`
 }
 
 // ElasticsearchTarget - Elasticsearch target.
@@ -58,7 +59,7 @@ func (target *ElasticsearchTarget) Send(eventData event.Event) (err error) {
 	}
 
 	update := func() error {
-		_, err := target.client.Index().Index(target.args.Index).Type("event").BodyJson(map[string]interface{}{"Records": []event.Event{eventData}}).Id(key).Do(context.Background())
+		_, err := target.client.Index().Index(target.args.Index).Type("event").BodyJson(map[string]interface{}{"Records": []event.Event{eventData}}).Id(key).Pipeline(target.args.Pipeline).Do(context.Background())
 		return err
 	}
 
@@ -69,7 +70,7 @@ func (target *ElasticsearchTarget) Send(eventData event.Event) (err error) {
 		}
 
 		eventTimeMS := fmt.Sprintf("%d", eventTime.UnixNano()/1000000)
-		_, err = target.client.Index().Index(target.args.Index).Type("event").Timestamp(eventTimeMS).BodyJson(map[string]interface{}{"Records": []event.Event{eventData}}).Do(context.Background())
+		_, err = target.client.Index().Index(target.args.Index).Type("event").Timestamp(eventTimeMS).BodyJson(map[string]interface{}{"Records": []event.Event{eventData}}).Pipeline(target.args.Pipeline).Do(context.Background())
 		return err
 	}
 

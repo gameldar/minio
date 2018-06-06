@@ -265,6 +265,7 @@ The default location of Minio server configuration file is ``~/.minio/config.jso
 | `format` | _string_ | (Required) Either `namespace` or `access`. |
 | `url` | _string_ | (Required) The Elasticsearch server's address, with optional authentication info. For example: `http://localhost:9200` or with authentication info `http://elastic:MagicWord@127.0.0.1:9200`. |
 | `index` | _string_ | (Required) The name of an Elasticsearch index in which Minio will store documents. |
+| `pipeline` | _string_ | (Optional) A comma separated list of pipelines to use for add or update events. |
 
 An example of Elasticsearch configuration is as follows:
 
@@ -274,7 +275,8 @@ An example of Elasticsearch configuration is as follows:
         "enable": true,
         "format": "namespace",
         "url": "http://127.0.0.1:9200",
-        "index": "minio_events"
+        "index": "minio_events",
+        "pipeline": "attachment"
     }
 },
 ```
